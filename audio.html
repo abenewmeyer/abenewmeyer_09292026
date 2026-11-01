@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Listen — Abe Newmeyer</title>
+  <meta name="description" content="Listen to reflections from more than a decade of daily writings. Same titles. Same record." />
+  <meta name="theme-color" content="#0A0A0A" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            black: '#0A0A0A', charcoal: '#2C2C2C', purple: '#5C2D91',
+            'purple-light': '#7B4BB8', offwhite: '#F7F5F2', gold: '#C5A46E'
+          },
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background: #0A0A0A; color: #F7F5F2; }
+    .btn-primary {
+      background: linear-gradient(135deg, #5C2D91 0%, #4A2475 100%);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #7B4BB8 0%, #5C2D91 100%);
+    }
+    .card {
+      background: linear-gradient(145deg, rgba(44,44,44,0.5) 0%, rgba(10,10,10,0.85) 100%);
+      border: 1px solid rgba(92, 45, 145, 0.2);
+    }
+    .topic-chip.active {
+      background: rgba(92,45,145,0.35);
+      border-color: #5C2D91;
+      color: #F7F5F2;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased min-h-screen">
+
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-black/85 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="font-serif text-xl tracking-wide text-offwhite hover:text-gold transition-colors">Abe Newmeyer</a>
+      <div class="hidden md:flex items-center gap-8 text-sm tracking-wide text-offwhite/70">
+        <a href="/" class="hover:text-offwhite transition-colors">Be Greater</a>
+        <a href="/writings.html" class="hover:text-offwhite transition-colors">Writings and AI Abe</a>
+        <a href="/audio.html" class="text-gold">Listen</a>
+        <a href="/shorts.html" class="hover:text-offwhite transition-colors">Shorts</a>
+        <a href="/#begin" class="btn-primary text-white px-5 py-2 rounded-sm text-xs uppercase tracking-widest font-medium">Begin to Be Greater</a>
+      </div>
+      <a href="/#begin" class="md:hidden btn-primary text-white px-4 py-2 rounded-sm text-xs uppercase tracking-widest">Begin</a>
+    </div>
+  </nav>
+
+  <main class="pt-28 pb-20 px-6 max-w-6xl mx-auto">
+    <header class="mb-10 max-w-2xl">
+      <p class="text-gold text-xs uppercase tracking-[0.2em] mb-3">From the record</p>
+      <h1 class="font-serif text-4xl md:text-5xl text-offwhite mb-4">Listen</h1>
+      <p class="text-offwhite/65 text-base leading-relaxed">
+        Audio from the daily writings. Exact titles. A clear voice reading the words — not a clone of Abe.
+      </p>
+    </header>
+
+    <div class="relative mb-4">
+      <input id="search-input" type="search" placeholder="Search by topic or phrase…" class="w-full bg-charcoal/60 border border-white/10 rounded-sm px-5 py-4 text-offwhite placeholder-white/30 focus:outline-none focus:border-purple/50" autocomplete="off" />
+      <p id="result-count" class="mt-2 text-xs text-offwhite/40"></p>
+    </div>
+    <div id="topic-filters" class="flex flex-wrap gap-2 mb-8"></div>
+    <div id="results" class="space-y-3"></div>
+    <p id="empty" class="hidden text-offwhite/50 text-sm py-12 text-center">No audio published yet for this filter. Try another topic, or check back after the first batch goes live.</p>
+  </main>
+
+  <footer class="border-t border-white/5 py-10 px-6 text-center text-offwhite/40 text-xs">
+    <p>Abe Newmeyer · Be Greater</p>
+    <p class="mt-2"><a href="/privacy.html" class="hover:text-offwhite">Privacy</a> · <a href="/terms.html" class="hover:text-offwhite">Terms</a></p>
+  </footer>
+
+  <script>
+    let items = [];
+    let activeTopic = null;
+    const searchInput = document.getElementById('search-input');
+    const resultsEl = document.getElementById('results');
+    const countEl = document.getElementById('result-count');
+    const emptyEl = document.getElementById('empty');
+    const topicFiltersEl = document.getElementById('topic-filters');
+
+    function escapeHtml(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function allTopics() {
+      const s = new Set();
+      items.forEach(i => (i.topics || []).forEach(t => s.add(t)));
+      return [...s].sort();
+    }
+
+    function renderTopics() {
+      const topics = allTopics();
+      topicFiltersEl.innerHTML = `
+        <button data-topic="" class="topic-chip px-3 py-1.5 rounded-sm text-xs border transition-colors ${!activeTopic ? 'active' : 'border-white/15 text-offwhite/60 hover:border-purple/40'}">All</button>
+        ${topics.map(t => `<button data-topic="${escapeHtml(t)}" class="topic-chip px-3 py-1.5 rounded-sm text-xs border transition-colors ${activeTopic === t ? 'active' : 'border-white/15 text-offwhite/60 hover:border-purple/40'}">${escapeHtml(t)}</button>`).join('')}
+      `;
+      topicFiltersEl.querySelectorAll('.topic-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeTopic = btn.dataset.topic || null;
+          renderTopics();
+          applyFilters();
+        });
+      });
+    }
+
+    function applyFilters() {
+      const q = searchInput.value.trim().toLowerCase();
+      let list = items.slice();
+      if (activeTopic) list = list.filter(i => (i.topics || []).includes(activeTopic));
+      if (q) {
+        list = list.filter(i =>
+          (i.title || '').toLowerCase().includes(q) ||
+          (i.preview || '').toLowerCase().includes(q) ||
+          (i.topics || []).join(' ').toLowerCase().includes(q)
+        );
+      }
+      countEl.textContent = list.length
+        ? `${list.length} recording${list.length === 1 ? '' : 's'}${activeTopic ? ' in “' + activeTopic + '”' : ''}${q ? ' matching “' + searchInput.value.trim() + '”' : ''}`
+        : '';
+      resultsEl.innerHTML = '';
+      if (!list.length) {
+        emptyEl.classList.remove('hidden');
+        return;
+      }
+      emptyEl.classList.add('hidden');
+      list.forEach(i => {
+        const row = document.createElement('div');
+        row.className = 'card rounded-sm p-4 md:p-5';
+        const src = i.audio || i.video || '';
+        row.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-start gap-4">
+            <div class="flex-1 min-w-0">
+              <h2 class="font-serif text-lg text-offwhite mb-1">${escapeHtml(i.title)}</h2>
+              <div class="flex flex-wrap gap-1.5 mb-2">
+                ${(i.topics || []).map(t => `<span class="text-[10px] uppercase tracking-wider text-gold/70 border border-gold/20 px-1.5 py-0.5 rounded-sm">${escapeHtml(t)}</span>`).join('')}
+              </div>
+              ${i.preview ? `<p class="text-offwhite/50 text-sm line-clamp-2">${escapeHtml(i.preview)}</p>` : ''}
+            </div>
+            <div class="w-full sm:w-72 shrink-0">
+              ${src
+                ? `<audio controls preload="none" class="w-full" src="${escapeHtml(src)}"></audio>
+                   <p class="mt-1 text-[10px] text-offwhite/35">Same narration as the short · <a class="text-gold/80 hover:text-gold" href="/shorts.html">Watch</a></p>`
+                : `<p class="text-offwhite/40 text-xs">Audio coming soon</p>`}
+            </div>
+          </div>
+        `;
+        resultsEl.appendChild(row);
+      });
+    }
+
+    async function load() {
+      // Same Supabase catalog as Shorts (no manual file sync). MP4 carries the voice track.
+      const SUPABASE_URL = 'https://fqpkiefxcszhlxdskiwb.supabase.co';
+      const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxcGtpZWZ4Y3N6aGx4ZHNraXdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2OTM1NTAsImV4cCI6MjEwNjI2OTU1MH0.-S4KkXZA-qdWgnSNVpIX1XZie75cS5-Y0KaPNP9_ee8';
+      items = [];
+      try {
+        const url = SUPABASE_URL + '/rest/v1/media_assets?select=slug,title,description,topics,tags,video_url,duration_sec,status,created_at&or=(status.eq.generated,status.eq.published)&order=created_at.desc&limit=1000';
+        const res = await fetch(url, {
+          headers: {
+            apikey: SUPABASE_ANON,
+            Authorization: 'Bearer ' + SUPABASE_ANON,
+            Accept: 'application/json'
+          },
+          cache: 'no-store'
+        });
+        if (!res.ok) throw new Error('supabase ' + res.status);
+        const rows = await res.json();
+        items = (rows || []).map(r => ({
+          slug: r.slug,
+          title: r.title,
+          preview: r.description || '',
+          topics: r.topics || [],
+          audio: r.video_url,
+          video: r.video_url
+        })).filter(i => i.audio);
+      } catch (e) {
+        console.warn(e);
+        items = [];
+      }
+      renderTopics();
+      applyFilters();
+    }
+
+    searchInput.addEventListener('input', applyFilters);
+    load();
+  </script>
+</body>
+</html>

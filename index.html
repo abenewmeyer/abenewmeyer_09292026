@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abe Newmeyer — Be Greater</title>
+  <meta name="description" content="You got what you worked for. Now you're asking if this is all there is. Free 30-minute conversation with Abe Newmeyer. AI Abe answers from more than a decade of writings." />
+  <meta property="og:title" content="Abe Newmeyer — Be Greater" />
+  <meta property="og:description" content="You got what you worked for. Now you're asking if this is all there is. Free 30-minute conversation. AI Abe answers from the writings." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.abenewmeyer.com/" />
+  <meta property="og:image" content="https://www.abenewmeyer.com/images/abe-smiling-purple.jpg" />
+  <meta name="theme-color" content="#0A0A0A" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            black: '#0A0A0A',
+            purple: { DEFAULT: '#5C2D91', dark: '#4A2475', light: '#7B4BB8' },
+            charcoal: '#2C2C2C',
+            offwhite: '#F7F5F2',
+            gold: '#C5A46E'
+          },
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background: #0A0A0A; color: #F7F5F2; }
+    .btn-primary {
+      background: linear-gradient(135deg, #5C2D91 0%, #4A2475 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #7B4BB8 0%, #5C2D91 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 40px -10px rgba(92, 45, 145, 0.5);
+    }
+    .card {
+      background: linear-gradient(145deg, rgba(44,44,44,0.5) 0%, rgba(10,10,10,0.85) 100%);
+      border: 1px solid rgba(92, 45, 145, 0.2);
+    }
+    .hero-gradient {
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(92,45,145,0.15) 0%, transparent 60%);
+    }
+    .modal-backdrop { background: rgba(0,0,0,0.9); backdrop-filter: blur(6px); }
+    @media (prefers-reduced-motion: reduce) {
+      .proof-track { animation: none !important; }
+    }
+  </style>
+</head>
+<body class="font-sans antialiased">
+
+  <!-- NAV -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-black/85 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="font-serif text-xl tracking-wide text-offwhite hover:text-gold transition-colors">Abe Newmeyer</a>
+      <div class="hidden md:flex items-center gap-8 text-sm tracking-wide text-offwhite/70">
+        <a href="/" class="hover:text-offwhite transition-colors">Be Greater</a>
+        <a href="/writings.html" class="hover:text-offwhite transition-colors">Writings and AI Abe</a>
+        <a href="/shorts.html" class="hover:text-offwhite transition-colors">Shorts</a>
+        <a href="#about" class="hover:text-offwhite transition-colors">About</a>
+        <button onclick="openModal()" class="btn-primary text-white px-5 py-2 rounded-sm text-xs uppercase tracking-widest font-medium">Begin to Be Greater</button>
+      </div>
+      <button onclick="openModal()" class="md:hidden btn-primary text-white px-4 py-2 rounded-sm text-xs uppercase tracking-widest" aria-label="Begin to Be Greater">Begin</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero-gradient min-h-screen flex items-center pt-24 pb-16 relative overflow-hidden">
+    <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center relative z-10">
+      <div class="order-2 lg:order-1 text-center lg:text-left">
+        <p class="text-gold text-xs uppercase tracking-widest mb-2">Abe Newmeyer</p>
+        <p class="text-offwhite/50 text-sm mb-6">The Synthesizer</p>
+        <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl leading-[1.1] text-offwhite mb-6">
+          You got what you worked for.<br />
+          <span class="text-offwhite/85">Now you're asking if this is all there is.</span>
+        </h1>
+        <p class="text-lg text-offwhite/65 leading-relaxed max-w-lg mx-auto lg:mx-0 mb-4">
+          The promotion. The house. The weight you lost. Did any of it make you greater?
+        </p>
+        <p class="text-sm text-offwhite/50 leading-relaxed max-w-lg mx-auto lg:mx-0 mb-10">
+          More than 1,500 written over more than a decade. Hundreds are here to read. They began as a way to commune with my Creator and to stave off depression. I never meant to publish them.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+          <button onclick="openModal()" class="btn-primary text-white px-8 py-4 rounded-sm text-sm uppercase tracking-widest font-medium">Begin to Be Greater</button>
+          <a href="/writings.html" class="border border-white/20 text-offwhite/80 hover:border-gold/50 hover:text-gold px-8 py-4 rounded-sm text-sm uppercase tracking-widest font-medium text-center transition-all">Ask AI Abe</a>
+        </div>
+        <p class="mt-6 text-xs text-offwhite/45 tracking-wide">
+          Free. Thirty minutes. AI Abe answers from the writings published here and isn't me live. Five free questions a day.
+        </p>
+      </div>
+      <div class="order-1 lg:order-2 flex justify-center lg:justify-end">
+        <div class="relative">
+          <div class="absolute -inset-4 bg-purple/20 rounded-full blur-2xl"></div>
+          <img
+            src="/images/abe-smiling-purple.jpg"
+            width="384"
+            height="512"
+            alt="Abe Newmeyer, smiling, in a suit with a purple tie"
+            class="relative w-72 sm:w-80 lg:w-96 aspect-[3/4] object-cover object-top rounded-sm"
+            onerror="this.onerror=null;this.src='/images/abe-closeup-navy-purple.jpg';"
+          />
+          <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROOF CARDS -->
+  <section class="py-16 border-t border-white/5" aria-label="From the writings">
+    <div class="max-w-6xl mx-auto px-6">
+      <p class="text-center text-gold text-xs uppercase tracking-widest mb-8">From the writings</p>
+      <div id="proof-carousel" class="relative max-w-2xl mx-auto">
+        <div id="proof-card" class="card rounded-sm p-8 text-center min-h-[200px] flex flex-col justify-center">
+          <p class="text-xs text-offwhite/50 mb-2">Mr. Newmeyer wrote</p>
+          <p id="proof-meta" class="text-sm text-gold/80 mb-3"></p>
+          <p id="proof-quote" class="font-serif text-xl text-offwhite leading-relaxed mb-4"></p>
+          <a id="proof-link" href="/writings.html" class="text-xs text-purple hover:text-purple-light underline underline-offset-2">Read the entry</a>
+        </div>
+        <div class="flex items-center justify-center gap-4 mt-6">
+          <button type="button" id="proof-prev" class="text-offwhite/40 hover:text-gold text-lg" aria-label="Previous entry">‹</button>
+          <div id="proof-dots" class="flex gap-2"></div>
+          <button type="button" id="proof-next" class="text-offwhite/40 hover:text-gold text-lg" aria-label="Next entry">›</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section id="why" class="py-24 lg:py-32">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <p class="text-gold text-xs uppercase tracking-widest mb-6">Why this exists</p>
+      <h2 class="font-serif text-3xl sm:text-4xl text-offwhite leading-tight mb-8">
+        Getting what you want is not the same as being greater.
+      </h2>
+      <p class="text-lg text-offwhite/60 leading-relaxed mb-6">
+        I know because I stacked careers, moved halfway around the world, and still had to write the same hard questions down on paper. The lists are the record. The conversation is where we see if the next step is worth taking together.
+      </p>
+      <p class="text-lg text-offwhite/60 leading-relaxed">
+        There is one of me. When today's conversations are full, you join the waiting list.
+      </p>
+    </div>
+  </section>
+
+  <!-- PARTS -->
+  <section id="parts" class="py-24 lg:py-32 bg-gradient-to-b from-black via-charcoal/20 to-black">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <p class="text-gold text-xs uppercase tracking-widest mb-4">What you can do here</p>
+        <h2 class="font-serif text-3xl sm:text-4xl text-offwhite mb-4">Three doors</h2>
+        <p class="text-offwhite/50 max-w-xl mx-auto">Pick the one that fits today. None of them require you to buy anything first.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6 lg:gap-8 text-center">
+        <div class="card p-8 lg:p-10 rounded-sm">
+          <p class="text-gold font-serif text-lg mb-3">01</p>
+          <h3 class="font-serif text-2xl text-offwhite mb-4">Talk with Abe</h3>
+          <p class="text-offwhite/60 leading-relaxed text-sm mb-6">
+            A free thirty-minute conversation. You apply. If it's a fit, you hear back within 48 hours.
+          </p>
+          <button onclick="openModal()" class="text-xs uppercase tracking-widest text-gold hover:text-gold/80">Begin to Be Greater →</button>
+        </div>
+        <div class="card p-8 lg:p-10 rounded-sm">
+          <p class="text-gold font-serif text-lg mb-3">02</p>
+          <h3 class="font-serif text-2xl text-offwhite mb-4">Read the writings</h3>
+          <p class="text-offwhite/60 leading-relaxed text-sm mb-6">
+            Hundreds of dated lists, published as they were written. Start anywhere. Sort by newest or oldest.
+          </p>
+          <a href="/writings.html" class="text-xs uppercase tracking-widest text-gold hover:text-gold/80">Open the library →</a>
+        </div>
+        <div class="card p-8 lg:p-10 rounded-sm">
+          <p class="text-gold font-serif text-lg mb-3">03</p>
+          <h3 class="font-serif text-2xl text-offwhite mb-4">Ask AI Abe</h3>
+          <p class="text-offwhite/60 leading-relaxed text-sm mb-6">
+            Five free questions a day, answered from the writings on this site. Not a live chat with me.
+          </p>
+          <a href="/writings.html" class="text-xs uppercase tracking-widest text-gold hover:text-gold/80">Ask a question →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOR / NOT FOR -->
+  <section class="py-24 lg:py-32">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <p class="text-gold text-xs uppercase tracking-widest mb-6">A filter</p>
+      <h2 class="font-serif text-3xl sm:text-4xl text-offwhite mb-12">Who this is for</h2>
+      <div class="grid md:grid-cols-2 gap-10 text-left">
+        <div class="card p-8 rounded-sm text-center md:text-left">
+          <p class="text-gold text-xs uppercase tracking-widest mb-4">For you if</p>
+          <ul class="space-y-3 text-offwhite/60 text-sm leading-relaxed">
+            <li>You got what you aimed at and it went quiet afterward.</li>
+            <li>You're willing to do real work — time, effort, energy — not only spend money.</li>
+            <li>You want a plain yes or no on whether we should talk further.</li>
+          </ul>
+        </div>
+        <div class="card p-8 rounded-sm text-center md:text-left">
+          <p class="text-gold text-xs uppercase tracking-widest mb-4">Not for you if</p>
+          <ul class="space-y-3 text-offwhite/60 text-sm leading-relaxed">
+            <li>You want to be motivated. This isn't that.</li>
+            <li>You want results guaranteed. Nobody can promise that.</li>
+            <li>You want someone else to do the work for you.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="py-24 lg:py-32 relative overflow-hidden">
+    <div class="absolute inset-0 pointer-events-none opacity-20">
+      <img src="/images/be-greater.png" width="1200" height="800" alt="" class="w-full h-full object-cover object-center" />
+      <div class="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-black"></div>
+    </div>
+    <div class="max-w-6xl mx-auto px-6 relative z-10">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div class="text-center lg:text-left">
+          <p class="text-gold text-xs uppercase tracking-widest mb-6">About</p>
+          <h2 class="font-serif text-3xl sm:text-4xl text-offwhite mb-8">Untethered at 45</h2>
+          <div class="space-y-5 text-offwhite/60 leading-relaxed">
+            <p>
+              My parents died within seven months of each other, and they weren't the first people I loved to die. I sold the house I grew up in and left Fort Worth. I wrote the first draft of my first book in 72 days in Rio de Janeiro, then came back to the States and spent about a year as a FEMA disaster inspector and then an SBA loan officer. On Thanksgiving Day 2018 I flew to the Philippines on a one-way ticket that was meant to cover five or six weeks. I'm still here. Before all of that: financial services, life insurance, auto sales and retail.
+            </p>
+            <p>
+              In February 2024 I was on the back of a motorcycle (a habal habal, as the locals call it) when a small cargo truck hit us from behind. I don't remember it. I've only seen the security-camera footage. Five broken ribs, a broken right arm, three weeks in the hospital, and months of relearning simple things. I still write.
+            </p>
+            <p>
+              Abe Newmeyer is my pen name. I chose it for privacy, because I never planned to publish any of this.
+            </p>
+          </div>
+        </div>
+        <div class="flex justify-center">
+          <img
+            src="/images/abe-fullbody-navy.jpg"
+            width="288"
+            height="432"
+            alt="Abe Newmeyer standing, full body, navy suit"
+            class="w-56 sm:w-64 lg:w-72 aspect-[2/3] object-cover object-top rounded-sm border border-white/10"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="py-24 lg:py-32 border-t border-white/5">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <p class="text-gold text-xs uppercase tracking-widest mb-6">From people who've worked with me</p>
+      <div class="grid md:grid-cols-2 gap-8">
+        <blockquote class="card p-8 rounded-sm text-left">
+          <p class="text-offwhite/70 leading-relaxed mb-6 text-sm">
+            Abe has a way of cutting through noise and getting to what actually moves a business forward. Practical, steady, and direct.
+          </p>
+          <footer class="text-xs text-gold/80">Herb M., Author</footer>
+        </blockquote>
+        <blockquote class="card p-8 rounded-sm text-left">
+          <p class="text-offwhite/70 leading-relaxed mb-6 text-sm">
+            Working with Abe improved how we think about growth and accountability. Clear expectations. Real follow-through.
+          </p>
+          <footer class="text-xs text-gold/80">Mark D., President, AllCalls4Business</footer>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPLY -->
+  <section class="py-24 lg:py-32 bg-gradient-to-b from-black to-charcoal/30">
+    <div class="max-w-2xl mx-auto px-6 text-center">
+      <p class="text-gold text-xs uppercase tracking-widest mb-6">Apply</p>
+      <h2 class="font-serif text-3xl sm:text-4xl text-offwhite mb-6">There is one of me, and a lot of you.</h2>
+      <p class="text-offwhite/60 mb-10 leading-relaxed">
+        I give each person real time, so I can only hold so many conversations a day. When today's are full, you join the waiting list.
+      </p>
+      <button onclick="openModal()" class="btn-primary text-white px-10 py-4 rounded-sm text-sm uppercase tracking-widest font-medium">Begin to Be Greater</button>
+      <p class="mt-6 text-xs text-offwhite/45 tracking-wide">
+        Thirty minutes, free, and it ends with a plain yes or no. If it's a fit, you'll hear from me within 48 hours.
+      </p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/5 py-12">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-offwhite/45">
+      <div class="text-center md:text-left">
+        <p class="font-serif text-lg text-offwhite">Abe Newmeyer</p>
+        <p class="mt-1">© <span id="year"></span> · AI Abe isn't Abe live</p>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-6">
+        <a href="/writings.html" class="hover:text-gold transition-colors">Writings</a>
+        <a href="/privacy.html" class="hover:text-gold transition-colors">Privacy</a>
+        <a href="/terms.html" class="hover:text-gold transition-colors">Terms</a>
+        <button onclick="openModal()" class="hover:text-gold transition-colors">Dialogue</button>
+        <a href="https://www.facebook.com/profile.php?id=61595488971655" target="_blank" rel="noopener noreferrer" aria-label="Abe Newmeyer on Facebook" class="text-offwhite/45 hover:text-gold transition-colors">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL -->
+  <div id="modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+    <div class="modal-backdrop absolute inset-0" onclick="closeModal()"></div>
+    <div class="relative bg-charcoal border border-white/10 rounded-sm max-w-md w-full p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-offwhite/40 hover:text-offwhite text-2xl leading-none" aria-label="Close">&times;</button>
+      <p class="text-gold text-xs uppercase tracking-widest mb-3">Begin to Be Greater</p>
+      <h3 class="font-serif text-2xl text-offwhite mb-2">Request a conversation</h3>
+      <p class="text-sm text-offwhite/50 mb-6">Free. Thirty minutes. Ends with a plain yes or no. Reply within 48 hours if it's a fit.</p>
+      <form id="dialogue-form" class="space-y-5" onsubmit="handleSubmit(event)">
+        <input type="hidden" name="_subject" value="Begin to Be Greater — Conversation Request" />
+        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-offwhite/50 mb-2">Your name</label>
+          <input type="text" name="name" required class="w-full bg-black/50 border border-white/10 rounded-sm px-4 py-3 text-offwhite placeholder-white/20 focus:outline-none focus:border-purple/50" placeholder="Full name" />
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-offwhite/50 mb-2">Email</label>
+          <input type="email" name="email" required class="w-full bg-black/50 border border-white/10 rounded-sm px-4 py-3 text-offwhite placeholder-white/20 focus:outline-none focus:border-purple/50" placeholder="you@domain.com" />
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-offwhite/50 mb-2">What have you achieved that you thought would make you greater? Did it?</label>
+          <textarea name="achieved" required rows="3" class="w-full bg-black/50 border border-white/10 rounded-sm px-4 py-3 text-offwhite placeholder-white/20 focus:outline-none focus:border-purple/50 resize-none" placeholder="Be honest. Short is fine."></textarea>
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-offwhite/50 mb-2">What do you want next, and how would getting it make you greater?</label>
+          <textarea name="want_next" required rows="3" class="w-full bg-black/50 border border-white/10 rounded-sm px-4 py-3 text-offwhite placeholder-white/20 focus:outline-none focus:border-purple/50 resize-none"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-offwhite/50 mb-2">What have you already tried?</label>
+          <textarea name="tried" required rows="2" class="w-full bg-black/50 border border-white/10 rounded-sm px-4 py-3 text-offwhite placeholder-white/20 focus:outline-none focus:border-purple/50 resize-none"></textarea>
+        </div>
+        <button type="submit" class="w-full btn-primary text-white py-4 rounded-sm text-sm uppercase tracking-widest font-medium">Submit request</button>
+        <p class="text-center text-xs text-offwhite/35">If today's conversations are full, you'll be on the waiting list.</p>
+      </form>
+      <div id="success-message" class="hidden text-center py-8">
+        <h4 class="font-serif text-2xl text-offwhite mb-3">Request received</h4>
+        <p class="text-offwhite/50 text-sm leading-relaxed">If it's a fit, you'll hear from me within 48 hours. If today's slots are full, you're on the waiting list.</p>
+        <button onclick="closeModal()" class="mt-8 text-xs uppercase tracking-widest text-gold hover:text-gold/80">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const modal = document.getElementById('modal');
+    const form = document.getElementById('dialogue-form');
+    const success = document.getElementById('success-message');
+
+    function openModal() {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      form.classList.remove('hidden');
+      success.classList.add('hidden');
+      form.reset();
+    }
+    function closeModal() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const btn = form.querySelector('button[type="submit"]');
+      const original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      fetch('https://formspree.io/f/xyezldpg', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: formData
+      }).then(r => {
+        if (r.ok) {
+          form.classList.add('hidden');
+          success.classList.remove('hidden');
+        } else throw new Error('fail');
+      }).catch(() => {
+        alert('Something went wrong. Please try again or email info@abenewmeyer.com.');
+      }).finally(() => {
+        btn.disabled = false;
+        btn.textContent = original;
+      });
+    }
+
+    // Proof carousel
+    const PROOF = [
+      { title: 'Better Than Yesterday', date: 'September 7, 2022', quote: 'The title works for how I\'m feeling today, as well as how I try to live my life.', slug: 'better-than-yesterday' },
+      { title: 'From There To Here', date: 'July 9, 2016', quote: 'Luck or Grace — you decide. For more than two years I\'ve been homeless in the sense that mattered.', slug: 'from-there-to-here' },
+      { title: 'Mission Accomplished', date: 'April 22, 2020', quote: 'Yesterday, with the exception of an intro chapter, I completed my latest work.', slug: 'mission-accomplished' },
+      { title: 'Acceptance', date: 'March 12, 2020', quote: 'Acceptance is not the same as giving up. It is the start of dealing with what is real.', slug: 'acceptance' },
+      { title: 'Action', date: 'March 13, 2020', quote: 'Knowing is not the same as doing. The gap between the two is where most of us live.', slug: 'action' }
+    ];
+    let proofIdx = 0;
+    let proofTimer;
+    function renderProof() {
+      const p = PROOF[proofIdx];
+      document.getElementById('proof-meta').textContent = p.title + ' · ' + p.date;
+      document.getElementById('proof-quote').textContent = '"' + p.quote + '"';
+      document.getElementById('proof-link').href = '/writings.html?entry=' + encodeURIComponent(p.slug);
+      document.querySelectorAll('#proof-dots button').forEach((d, i) => {
+        d.className = 'w-2 h-2 rounded-full ' + (i === proofIdx ? 'bg-gold' : 'bg-white/20');
+      });
+    }
+    function proofNext() { proofIdx = (proofIdx + 1) % PROOF.length; renderProof(); }
+    function proofPrev() { proofIdx = (proofIdx - 1 + PROOF.length) % PROOF.length; renderProof(); }
+    const dots = document.getElementById('proof-dots');
+    PROOF.forEach((_, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', 'Show entry ' + (i + 1));
+      b.addEventListener('click', () => { proofIdx = i; renderProof(); });
+      dots.appendChild(b);
+    });
+    document.getElementById('proof-next').addEventListener('click', proofNext);
+    document.getElementById('proof-prev').addEventListener('click', proofPrev);
+    const carousel = document.getElementById('proof-carousel');
+    function startProof() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      proofTimer = setInterval(proofNext, 8000);
+    }
+    function stopProof() { clearInterval(proofTimer); }
+    carousel.addEventListener('mouseenter', stopProof);
+    carousel.addEventListener('mouseleave', startProof);
+    carousel.addEventListener('focusin', stopProof);
+    carousel.addEventListener('focusout', startProof);
+    renderProof();
+    startProof();
+  </script>
+</body>
+</html>

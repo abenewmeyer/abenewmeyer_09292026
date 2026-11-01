@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shorts — Abe Newmeyer</title>
+  <meta name="description" content="Short reflections from more than a decade of daily writings. Exact titles. Branded visuals." />
+  <meta name="theme-color" content="#0A0A0A" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            black: '#0A0A0A', charcoal: '#2C2C2C', purple: '#5C2D91',
+            'purple-light': '#7B4BB8', offwhite: '#F7F5F2', gold: '#C5A46E'
+          },
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background: #0A0A0A; color: #F7F5F2; }
+    .btn-primary { background: linear-gradient(135deg, #5C2D91 0%, #4A2475 100%); }
+    .btn-primary:hover { background: linear-gradient(135deg, #7B4BB8 0%, #5C2D91 100%); }
+    .card {
+      background: linear-gradient(145deg, rgba(44,44,44,0.5) 0%, rgba(10,10,10,0.85) 100%);
+      border: 1px solid rgba(92, 45, 145, 0.2);
+    }
+    .topic-chip.active { background: rgba(92,45,145,0.35); border-color: #5C2D91; color: #F7F5F2; }
+    .video-shell { aspect-ratio: 9 / 16; max-height: 70vh; background: #111; }
+  </style>
+</head>
+<body class="font-sans antialiased min-h-screen">
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-black/85 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="font-serif text-xl tracking-wide text-offwhite hover:text-gold transition-colors">Abe Newmeyer</a>
+      <div class="hidden md:flex items-center gap-8 text-sm tracking-wide text-offwhite/70">
+        <a href="/" class="hover:text-offwhite transition-colors">Be Greater</a>
+        <a href="/writings.html" class="hover:text-offwhite transition-colors">Writings and AI Abe</a>
+        <a href="/audio.html" class="hover:text-offwhite transition-colors">Listen</a>
+        <a href="/shorts.html" class="text-gold">Shorts</a>
+        <a href="/#begin" class="btn-primary text-white px-5 py-2 rounded-sm text-xs uppercase tracking-widest font-medium">Begin to Be Greater</a>
+      </div>
+      <a href="/#begin" class="md:hidden btn-primary text-white px-4 py-2 rounded-sm text-xs uppercase tracking-widest">Begin</a>
+    </div>
+  </nav>
+  <main class="pt-28 pb-20 px-6 max-w-6xl mx-auto">
+    <header class="mb-10 max-w-2xl">
+      <p class="text-gold text-xs uppercase tracking-[0.2em] mb-3">From the record</p>
+      <h1 class="font-serif text-4xl md:text-5xl text-offwhite mb-4">Shorts</h1>
+      <p class="text-offwhite/65 text-base leading-relaxed">Short pieces from the writings. Exact titles. Brand visuals — not a third-party look.</p>
+    </header>
+    <div class="relative mb-4">
+      <input id="search-input" type="search" placeholder="Search by topic or phrase…" class="w-full bg-charcoal/60 border border-white/10 rounded-sm px-5 py-4 text-offwhite placeholder-white/30 focus:outline-none focus:border-purple/50" autocomplete="off" />
+      <p id="result-count" class="mt-2 text-xs text-offwhite/40"></p>
+    </div>
+    <div id="topic-filters" class="flex flex-wrap gap-2 mb-8"></div>
+    <div id="grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    <p id="empty" class="hidden text-offwhite/50 text-sm py-12 text-center">No shorts published yet for this filter.</p>
+  </main>
+  <div id="player-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/90 p-4">
+    <div class="relative w-full max-w-sm">
+      <button type="button" onclick="closePlayer()" class="absolute -top-10 right-0 text-offwhite/80 hover:text-offwhite text-sm uppercase tracking-widest">Close</button>
+      <div class="video-shell mx-auto rounded overflow-hidden border border-purple/30">
+        <video id="player" class="w-full h-full object-contain" controls playsinline></video>
+      </div>
+      <p id="player-title" class="mt-4 font-serif text-lg text-offwhite text-center"></p>
+    </div>
+  </div>
+  <footer class="border-t border-white/5 py-10 px-6 text-center text-offwhite/40 text-xs">
+    <p>Abe Newmeyer · Be Greater</p>
+    <p class="mt-2"><a href="/privacy.html" class="hover:text-offwhite">Privacy</a> · <a href="/terms.html" class="hover:text-offwhite">Terms</a></p>
+  </footer>
+  <script>
+    let items = [];
+    let activeTopic = null;
+    const searchInput = document.getElementById('search-input');
+    const gridEl = document.getElementById('grid');
+    const countEl = document.getElementById('result-count');
+    const emptyEl = document.getElementById('empty');
+    const topicFiltersEl = document.getElementById('topic-filters');
+    function escapeHtml(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function openPlayer(src, title) {
+      const modal = document.getElementById('player-modal');
+      const video = document.getElementById('player');
+      document.getElementById('player-title').textContent = title;
+      video.src = src;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      video.play().catch(() => {});
+    }
+    function closePlayer() {
+      const modal = document.getElementById('player-modal');
+      const video = document.getElementById('player');
+      video.pause();
+      video.removeAttribute('src');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+    document.getElementById('player-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'player-modal') closePlayer();
+    });
+    function allTopics() {
+      const s = new Set();
+      items.forEach(i => (i.topics || []).forEach(t => s.add(t)));
+      return [...s].sort();
+    }
+    function renderTopics() {
+      const topics = allTopics();
+      topicFiltersEl.innerHTML = `
+        <button data-topic="" class="topic-chip px-3 py-1.5 rounded-sm text-xs border transition-colors ${!activeTopic ? 'active' : 'border-white/15 text-offwhite/60 hover:border-purple/40'}">All</button>
+        ${topics.map(t => `<button data-topic="${escapeHtml(t)}" class="topic-chip px-3 py-1.5 rounded-sm text-xs border transition-colors ${activeTopic === t ? 'active' : 'border-white/15 text-offwhite/60 hover:border-purple/40'}">${escapeHtml(t)}</button>`).join('')}
+      `;
+      topicFiltersEl.querySelectorAll('.topic-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeTopic = btn.dataset.topic || null;
+          renderTopics();
+          applyFilters();
+        });
+      });
+    }
+    function applyFilters() {
+      const q = searchInput.value.trim().toLowerCase();
+      let list = items.slice();
+      if (activeTopic) list = list.filter(i => (i.topics || []).includes(activeTopic));
+      if (q) {
+        list = list.filter(i =>
+          (i.title || '').toLowerCase().includes(q) ||
+          (i.preview || '').toLowerCase().includes(q) ||
+          (i.topics || []).join(' ').toLowerCase().includes(q)
+        );
+      }
+      countEl.textContent = list.length
+        ? `${list.length} short${list.length === 1 ? '' : 's'}${activeTopic ? ' in “' + activeTopic + '”' : ''}${q ? ' matching “' + searchInput.value.trim() + '”' : ''}`
+        : '';
+      gridEl.innerHTML = '';
+      if (!list.length) { emptyEl.classList.remove('hidden'); return; }
+      emptyEl.classList.add('hidden');
+      list.forEach(i => {
+        if (!i.video) return;
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'card text-left rounded-lg overflow-hidden hover:border-purple/50 transition-colors group';
+        card.onclick = () => openPlayer(i.video, i.title);
+        card.innerHTML = `
+          <div class="aspect-[9/16] bg-charcoal/80 relative flex items-center justify-center">
+            ${i.poster ? `<img src="${escapeHtml(i.poster)}" alt="" class="absolute inset-0 w-full h-full object-cover opacity-90" />` : `<span class="text-offwhite/30 text-xs uppercase tracking-widest">Play</span>`}
+            <span class="absolute bottom-3 left-3 right-3 font-serif text-sm text-offwhite drop-shadow line-clamp-2">${escapeHtml(i.title)}</span>
+          </div>
+          <div class="p-4">
+            <p class="font-serif text-base text-offwhite">${escapeHtml(i.title)}</p>
+            ${(i.topics || []).length ? `<p class="mt-2 text-gold text-xs tracking-wide">${(i.topics || []).map(escapeHtml).join(' · ')}</p>` : ''}
+          </div>
+        `;
+        gridEl.appendChild(card);
+      });
+      if (!gridEl.children.length) emptyEl.classList.remove('hidden');
+    }
+    async function load() {
+      // Live catalog from Supabase (GitHub Action uploads). Fallback: local manifest.
+      const SUPABASE_URL = 'https://fqpkiefxcszhlxdskiwb.supabase.co';
+      const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxcGtpZWZ4Y3N6aGx4ZHNraXdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2OTM1NTAsImV4cCI6MjEwNjI2OTU1MH0.-S4KkXZA-qdWgnSNVpIX1XZie75cS5-Y0KaPNP9_ee8';
+      items = [];
+      try {
+        const url = SUPABASE_URL + '/rest/v1/media_assets?select=slug,title,description,topics,tags,video_url,duration_sec,status,created_at&or=(status.eq.generated,status.eq.published)&order=created_at.desc&limit=1000';
+        const res = await fetch(url, {
+          headers: {
+            apikey: SUPABASE_ANON,
+            Authorization: 'Bearer ' + SUPABASE_ANON,
+            Accept: 'application/json'
+          },
+          cache: 'no-store'
+        });
+        if (!res.ok) throw new Error('supabase ' + res.status);
+        const rows = await res.json();
+        items = (rows || []).map(r => ({
+          slug: r.slug,
+          title: r.title,
+          preview: r.description || '',
+          topics: r.topics || [],
+          video: r.video_url,
+          poster: '',
+          duration: r.duration_sec
+        })).filter(i => i.video);
+      } catch (e) {
+        console.warn('Supabase shorts load failed, trying local manifest', e);
+        try {
+          const res = await fetch('/media-manifest.json', { cache: 'no-store' });
+          if (res.ok) {
+            const data = await res.json();
+            items = (data.items || data || []).filter(i => i.video);
+          }
+        } catch (_) {}
+      }
+      renderTopics();
+      applyFilters();
+    }
+    searchInput.addEventListener('input', applyFilters);
+    load();
+  </script>
+</body>
+</html>
