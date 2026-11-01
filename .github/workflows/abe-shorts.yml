@@ -1,0 +1,35 @@
+name: Abe Shorts batch
+
+on:
+  workflow_dispatch:
+  schedule:
+    # every 6 hours — drains queue unattended
+    - cron: "0 */6 * * *"
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install system deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+
+      - name: Install Python deps
+        run: pip install -q edge-tts Pillow supabase
+
+      - name: Run batch
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          BATCH_SIZE: "30"
+          WRITINGS_URL: "https://www.abenewmeyer.com/writings-index.json"
+        run: python worker.py
