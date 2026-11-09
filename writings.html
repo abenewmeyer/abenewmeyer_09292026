@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Writings and AI Abe | Abe Newmeyer</title>
+  <meta name="description" content="Read hundreds of Abe Newmeyer's gratitude lists and ask AI Abe a question, answered from the writings published here." />
+  <meta name="theme-color" content="#0A0A0A" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            black: '#0A0A0A',
+            purple: { DEFAULT: '#5C2D91', dark: '#4A2475', light: '#7B4BB8' },
+            burgundy: '#6B1E3A',
+            charcoal: '#2C2C2C',
+            offwhite: '#F7F5F2',
+            gold: '#C5A46E'
+          },
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background-color: #0A0A0A; color: #F7F5F2; }
+    .btn-primary {
+      background: linear-gradient(135deg, #5C2D91 0%, #4A2475 100%);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #7B4BB8 0%, #5C2D91 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 40px -10px rgba(92, 45, 145, 0.5);
+    }
+    .card {
+      background: linear-gradient(145deg, rgba(44, 44, 44, 0.5) 0%, rgba(10, 10, 10, 0.85) 100%);
+      border: 1px solid rgba(92, 45, 145, 0.2);
+    }
+    .card:hover { border-color: rgba(92, 45, 145, 0.45); }
+    #chat-messages { scrollbar-width: thin; scrollbar-color: #5C2D91 #1a1a1a; }
+    #chat-messages::-webkit-scrollbar { width: 6px; }
+    #chat-messages::-webkit-scrollbar-thumb { background: #5C2D91; border-radius: 3px; }
+    .topic-chip.active { background: rgba(92,45,145,0.35); border-color: #5C2D91; color: #F7F5F2; }
+  </style>
+</head>
+<body class="font-sans antialiased min-h-screen">
+
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-black/85 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="font-serif text-xl tracking-wide text-offwhite hover:text-gold transition-colors">Abe Newmeyer</a>
+      <div class="hidden md:flex items-center gap-8 text-sm tracking-wide text-offwhite/70">
+        <a href="/" class="hover:text-offwhite transition-colors">Be Greater</a>
+        <a href="/writings.html" class="text-gold">Writings and AI Abe</a>
+        <a href="/#about" class="hover:text-offwhite transition-colors">About</a>
+        <a href="/" class="btn-primary text-white px-5 py-2 rounded-sm text-xs uppercase tracking-widest font-medium">Begin to Be Greater</a>
+      </div>
+      <a href="/" class="md:hidden text-xs uppercase tracking-widest text-gold">Home</a>
+    </div>
+  </nav>
+
+  <main class="pt-24 pb-20">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="mb-12 text-center max-w-2xl mx-auto">
+        <p class="text-gold text-xs uppercase tracking-widest mb-3">The record</p>
+        <h1 class="font-serif text-4xl sm:text-5xl text-offwhite mb-4">Writings and AI Abe</h1>
+        <p class="text-offwhite/60 leading-relaxed">
+          More than 1,500 written over more than a decade. Hundreds are here to read. Ask AI Abe about what you read. It answers from these pages and isn't Abe live.
+        </p>
+      </div>
+
+      <div class="grid lg:grid-cols-5 gap-8">
+        <div class="lg:col-span-3 space-y-6">
+          <div class="relative">
+            <input id="search-input" type="search" placeholder="Search by topic or phrase…" class="w-full bg-charcoal/60 border border-white/10 rounded-sm px-5 py-4 text-offwhite placeholder-white/30 focus:outline-none focus:border-purple/50 transition-colors" autocomplete="off" />
+            <p id="result-count" class="mt-2 text-xs text-offwhite/40"></p>
+          </div>
+          <div id="topic-filters" class="flex flex-wrap gap-2"></div>
+          <div id="results" class="space-y-4 max-h-[65vh] overflow-y-auto pr-1"></div>
+        </div>
+
+        <div class="lg:col-span-2">
+          <div class="card rounded-sm sticky top-28 flex flex-col h-[70vh] min-h-[520px]">
+            <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between">
+              <div>
+                <p class="font-serif text-lg text-offwhite">AI Abe</p>
+                <p class="text-xs text-offwhite/40">Grounded in the writings</p>
+              </div>
+              <span id="quota-display" class="text-xs text-gold/80"></span>
+            </div>
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-5 space-y-4">
+              <div class="text-sm text-offwhite/60 leading-relaxed">
+                Ask what these pages say about a hard day, a hard season, or whether getting what you wanted was enough.
+              </div>
+            </div>
+            <div class="p-4 border-t border-white/10">
+              <form id="chat-form" class="flex gap-2">
+                <input id="chat-input" type="text" placeholder="Ask AI Abe…" class="flex-1 bg-black/50 border border-white/10 rounded-sm px-4 py-3 text-sm text-offwhite placeholder-white/30 focus:outline-none focus:border-purple/50" autocomplete="off" />
+                <button type="submit" class="btn-primary text-white px-4 py-3 rounded-sm text-sm font-medium">Send</button>
+              </form>
+              <p id="rate-limit-msg" class="hidden mt-3 text-xs text-center text-gold/90 leading-relaxed"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- SIGN-UP MODAL -->
+  <div id="signup-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/90 backdrop-blur-sm" onclick="closeSignup()"></div>
+    <div class="relative bg-charcoal border border-white/10 rounded-sm max-w-md w-full p-8 shadow-2xl">
+      <button onclick="closeSignup()" class="absolute top-4 right-4 text-offwhite/40 hover:text-offwhite text-xl leading-none">&times;</button>
+      <p class="text-gold text-xs uppercase tracking-widest mb-2">Create a free account</p>
+      <h3 class="font-serif text-2xl text-offwhite mb-2">Create a free account</h3>
+      <p class="text-sm text-offwhite/50 mb-6">We store conversations so AI Abe can improve. An account lets you find yours again. See our <a href="/privacy.html" class="underline text-gold/80">privacy page</a>.</p>
+      <form id="signup-form" class="space-y-4">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs uppercase tracking-wider text-offwhite/50 mb-1.5">First name *</label>
+            <input name="first_name" required class="w-full bg-black/50 border border-white/10 rounded-sm px-3 py-2.5 text-offwhite text-sm focus:outline-none focus:border-purple/50" />
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-wider text-offwhite/50 mb-1.5">Last name *</label>
+            <input name="last_name" required class="w-full bg-black/50 border border-white/10 rounded-sm px-3 py-2.5 text-offwhite text-sm focus:outline-none focus:border-purple/50" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-offwhite/50 mb-1.5">Email *</label>
+          <input type="email" name="email" required class="w-full bg-black/50 border border-white/10 rounded-sm px-3 py-2.5 text-offwhite text-sm focus:outline-none focus:border-purple/50" />
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-offwhite/50 mb-1.5">Mobile <span class="normal-case tracking-normal text-offwhite/30">(optional)</span></label>
+          <input type="tel" name="phone" class="w-full bg-black/50 border border-white/10 rounded-sm px-3 py-2.5 text-offwhite text-sm focus:outline-none focus:border-purple/50" />
+        </div>
+        <label class="flex items-start gap-3 cursor-pointer">
+          <input type="checkbox" name="notify_ai_abe" class="mt-1 accent-purple" />
+          <span class="text-xs text-offwhite/60 leading-relaxed">Send me occasional updates about AI Abe</span>
+        </label>
+        <button type="submit" class="w-full btn-primary text-white py-3 rounded-sm text-sm uppercase tracking-widest font-medium mt-2">Create Free Account</button>
+        <p class="text-center text-[11px] text-offwhite/30">You can upgrade later for unlimited questions.</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- FULL ARTICLE MODAL -->
+  <div id="article-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/90 backdrop-blur-sm" onclick="closeArticle()"></div>
+    <div class="relative bg-charcoal border border-white/10 rounded-sm max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl">
+      <div class="px-6 pt-6 pb-3 border-b border-white/10 flex items-start justify-between gap-4">
+        <div>
+          <div id="article-topics" class="flex flex-wrap gap-1.5 mb-2"></div>
+          <h2 id="article-title" class="font-serif text-2xl text-purple"></h2>
+          <p id="article-date" class="text-xs text-gold/70 mt-1"></p>
+        </div>
+        <button onclick="closeArticle()" class="text-offwhite/40 hover:text-offwhite text-2xl leading-none shrink-0">&times;</button>
+      </div>
+      <div class="px-6 py-5 overflow-y-auto flex-1">
+        <div id="article-body" class="text-sm text-offwhite/75 leading-relaxed whitespace-pre-wrap"></div>
+      </div>
+      <div class="px-6 py-4 border-t border-white/10 text-right">
+        <button onclick="closeArticle()" class="text-xs uppercase tracking-widest text-gold hover:text-gold/80">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="border-t border-white/5 py-10">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-offwhite/40">
+      <p>© <span id="year"></span> Abe Newmeyer · The Synthesizer</p>
+      <div class="flex gap-6">
+        <a href="/" class="hover:text-gold transition-colors">Home</a>
+        <a href="/writings.html" class="hover:text-gold transition-colors">Writings</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const SUPABASE_URL = 'https://fqpkiefxcszhlxdskiwb.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxcGtpZWZ4Y3N6aGx4ZHNraXdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2OTM1NTAsImV4cCI6MjEwNjI2OTU1MH0.-S4KkXZA-qdWgnSNVpIX1XZie75cS5-Y0KaPNP9_ee8';
+    const GROQ_API_KEY = ''; // set later — do not commit real keys to GitHub
+    const FREE_DAILY_LIMIT = 5;
+    const STORAGE_KEY = 'aiabe_usage';
+    const ANON_KEY = 'aiabe_anon_id';
+    const CONV_KEY = 'aiabe_conversation_id';
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    function getAnonymousId() {
+      let id = localStorage.getItem(ANON_KEY);
+      if (!id) {
+        id = 'anon_' + crypto.randomUUID();
+        localStorage.setItem(ANON_KEY, id);
+      }
+      return id;
+    }
+
+    async function sbInsert(table, row) {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_ANON,
+            'Authorization': `Bearer ${SUPABASE_ANON}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=representation'
+          },
+          body: JSON.stringify(row)
+        });
+        if (!res.ok) {
+          console.warn('Supabase insert failed', table, await res.text());
+          return null;
+        }
+        const data = await res.json();
+        return Array.isArray(data) ? data[0] : data;
+      } catch (e) {
+        console.warn(e);
+        return null;
+      }
+    }
+
+    async function trackEvent(eventName, properties = {}) {
+      sbInsert('events', {
+        anonymous_id: getAnonymousId(),
+        event_name: eventName,
+        properties,
+        page_path: location.pathname,
+        schema_version: 1
+      });
+    }
+
+    // Conversations are ALWAYS saved (anonymous or identified)
+    async function ensureConversation() {
+      let convId = localStorage.getItem(CONV_KEY);
+      if (convId) return convId;
+      const row = await sbInsert('conversations', {
+        anonymous_id: getAnonymousId(),
+        title: 'AI Abe conversation'
+      });
+      if (row && row.id) {
+        localStorage.setItem(CONV_KEY, row.id);
+        return row.id;
+      }
+      return null;
+    }
+
+    async function saveMessage(role, content) {
+      const conversation_id = await ensureConversation();
+      if (!conversation_id) return;
+      await sbInsert('messages', { conversation_id, role, content });
+    }
+
+    function getUsage() {
+      const today = new Date().toISOString().slice(0, 10);
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return { day: today, count: 0 };
+        const data = JSON.parse(raw);
+        if (data.day !== today) return { day: today, count: 0 };
+        return data;
+      } catch { return { day: today, count: 0 }; }
+    }
+
+    function incrementUsage() {
+      const u = getUsage();
+      u.count += 1;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(u));
+      updateQuotaDisplay();
+      return u.count;
+    }
+
+    function updateQuotaDisplay() {
+      const u = getUsage();
+      const remaining = Math.max(0, FREE_DAILY_LIMIT - u.count);
+      document.getElementById('quota-display').textContent =
+        remaining > 0 ? `${remaining} free questions left today` : 'Daily limit reached';
+    }
+
+    let writings = [];
+    let activeTopic = null;
+    const resultsEl = document.getElementById('results');
+    const countEl = document.getElementById('result-count');
+    const searchInput = document.getElementById('search-input');
+    const topicFiltersEl = document.getElementById('topic-filters');
+
+    const ALL_TOPICS = [
+      "Gratitude & Perspective", "Discipline & Habits", "Progress & Getting Better",
+      "Purpose & Direction", "Work & Business", "Decisions & Action",
+      "Challenges & Resilience", "Time & Focus", "Relationships & Others",
+      "Self-Assessment", "Adaptability & Change", "Writing & Creation", "Hope & Willingness"
+    ];
+
+    async function loadWritings() {
+      try {
+        const res = await fetch('/writings-index.json');
+        writings = await res.json();
+        buildTopicChips();
+        applyFilters();
+      } catch (e) {
+        resultsEl.innerHTML = '<p class="text-offwhite/50 text-sm">Could not load writings index.</p>';
+      }
+    }
+
+    function buildTopicChips() {
+      topicFiltersEl.innerHTML = `
+        <button data-topic="" class="topic-chip px-3 py-1.5 rounded-sm text-xs border transition-colors ${!activeTopic ? 'active' : 'border-white/15 text-offwhite/60 hover:border-purple/40'}">All</button>
+        ${ALL_TOPICS.map(t => `<button data-topic="${t}" class="topic-chip px-3 py-1.5 rounded-sm text-xs border transition-colors ${activeTopic === t ? 'active' : 'border-white/15 text-offwhite/60 hover:border-purple/40'}">${t}</button>`).join('')}
+      `;
+      topicFiltersEl.querySelectorAll('.topic-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeTopic = btn.dataset.topic || null;
+          buildTopicChips();
+          applyFilters();
+          if (activeTopic) trackEvent('topic_filtered', { topic: activeTopic });
+        });
+      });
+    }
+
+    function applyFilters() {
+      const q = searchInput.value.trim().toLowerCase();
+      let list = writings;
+      if (activeTopic) list = list.filter(w => (w.topics || []).includes(activeTopic));
+      if (q) {
+        list = list.filter(w => w.title.toLowerCase().includes(q) || w.content.toLowerCase().includes(q));
+        if (q.length > 2) trackEvent('search_performed', { query: q });
+      }
+      renderResults(list.slice(0, 40));
+      if (!q && !activeTopic) countEl.textContent = `${writings.length} writings · showing first 40. Use topics or search.`;
+      else countEl.textContent = `${list.length} match${list.length === 1 ? '' : 'es'}${activeTopic ? ' in “' + activeTopic + '”' : ''}${q ? ' for “' + searchInput.value.trim() + '”' : ''}`;
+    }
+
+    function renderResults(list) {
+      if (!list.length) {
+        resultsEl.innerHTML = '<p class="text-offwhite/50 text-sm py-8 text-center">No matches. Try a different topic or phrase.</p>';
+        return;
+      }
+      resultsEl.innerHTML = list.map((w, idx) => `
+        <article class="card rounded-sm p-5 cursor-pointer hover:border-purple/50 transition-colors" data-idx="${writings.indexOf(w)}" onclick="openArticle(${writings.indexOf(w)})">
+          <div class="flex flex-wrap gap-1.5 mb-2">
+            ${(w.topics || []).map(t => `<span class="text-[10px] uppercase tracking-wider text-gold/70 border border-gold/20 px-1.5 py-0.5 rounded-sm">${escapeHtml(t)}</span>`).join('')}
+          </div>
+          <h3 class="font-serif text-xl text-purple mb-1 hover:text-purple-light transition-colors">${escapeHtml(w.title)}</h3>
+          ${w.date_label ? `<p class="text-xs text-gold/70 mb-2">${escapeHtml(w.date_label)}</p>` : ''}
+          <p class="text-sm text-offwhite/55 leading-relaxed">${escapeHtml(w.preview)}</p>
+          <p class="mt-3 text-xs text-purple/80">Read full piece →</p>
+        </article>
+      `).join('');
+    }
+
+    function openArticle(idx) {
+      const w = writings[idx];
+      if (!w) return;
+      document.getElementById('article-title').textContent = w.title;
+      const ad = document.getElementById('article-date');
+      if (ad) ad.textContent = w.date_label || '';
+      document.getElementById('article-topics').innerHTML = (w.topics || []).map(t =>
+        `<span class="text-[10px] uppercase tracking-wider text-gold/70 border border-gold/20 px-1.5 py-0.5 rounded-sm">${escapeHtml(t)}</span>`
+      ).join('');
+      document.getElementById('article-body').textContent = w.content;
+      document.getElementById('article-modal').classList.remove('hidden');
+      document.getElementById('article-modal').classList.add('flex');
+      trackEvent('article_opened', { title: w.title, slug: w.slug });
+    }
+    function closeArticle() {
+      document.getElementById('article-modal').classList.add('hidden');
+      document.getElementById('article-modal').classList.remove('flex');
+    }
+    window.openArticle = openArticle;
+    window.closeArticle = closeArticle;
+
+    function escapeHtml(str) {
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    searchInput.addEventListener('input', () => applyFilters());
+
+    const messagesEl = document.getElementById('chat-messages');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const rateMsg = document.getElementById('rate-limit-msg');
+
+    function addMessage(role, text, sources = []) {
+      const div = document.createElement('div');
+      if (role === 'user') {
+        div.className = 'ml-6 bg-purple/20 border border-purple/30 rounded-sm px-4 py-3 text-sm text-offwhite';
+        div.textContent = text;
+      } else {
+        div.className = 'mr-4 text-sm text-offwhite/80';
+        // Split into short paragraphs for skimmability
+        const paragraphs = text
+          .split(/(?<=[.!?])\s+/)
+          .filter(p => p.trim().length > 0)
+          .map(p => `<p class="mb-2.5 leading-relaxed">${escapeHtml(p.trim())}</p>`)
+          .join('');
+        let html = paragraphs;
+        if (sources && sources.length) {
+          html += `<div class="mt-3 pt-3 border-t border-white/10">
+            <p class="text-[11px] uppercase tracking-wider text-gold/70 mb-1.5">Sources</p>
+            <div class="flex flex-wrap gap-2">
+              ${sources.map(s => `<button type="button" onclick="openArticleByTitle('${escapeHtml(s).replace(/'/g, "\\'")}')" class="text-xs text-purple hover:text-purple-light underline underline-offset-2">${escapeHtml(s)}</button>`).join('')}
+            </div>
+          </div>`;
+        }
+        div.innerHTML = html;
+      }
+      messagesEl.appendChild(div);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function openArticleByTitle(title) {
+      const idx = writings.findIndex(w => w.title === title);
+      if (idx >= 0) openArticle(idx);
+    }
+    window.openArticleByTitle = openArticleByTitle;
+
+    // Theme expansion for implied meaning (query rewriting)
+    const THEME_EXPAND = {
+      courage: ["courage","brave","bravery","fear","afraid","scared","risk","uncertain","uncertainty","bold","leap"],
+      change: ["change","transition","pivot","adapt","adaptation","new","beginning","start over","reinvention","shift"],
+      transition: ["transition","change","pivot","career","next chapter","starting over","crossroads","threshold"],
+      discipline: ["discipline","habit","habits","consistent","consistency","standard","accountability","routine"],
+      purpose: ["purpose","why","mission","calling","direction","meaning","path"],
+      resilience: ["resilience","resilient","overcome","setback","hard","difficult","challenge","rough","persist"],
+      gratitude: ["gratitude","grateful","thankful","appreciate","appreciation","perspective"],
+      grief: ["grief","loss","mourning","sorrow","pain","healing","let go","letting go"],
+      identity: ["identity","who i am","self","authentic","authenticity","true self","become"],
+      fear: ["fear","afraid","scared","anxiety","worry","uncertain","doubt"],
+      work: ["work","business","career","job","profession","craft","mastery"],
+      relationships: ["relationship","relationships","people","others","mentor","friend","family","connection"],
+      time: ["time","focus","priority","priorities","distraction","present","morning"],
+      decision: ["decision","decide","choice","commit","commitment","action","implement"],
+      hope: ["hope","willing","willingness","faith","possible","possibility","belief"]
+    };
+
+    function expandQuery(question) {
+      const q = question.toLowerCase();
+      const terms = new Set(q.split(/[^a-z0-9]+/).filter(w => w.length > 2));
+      for (const [theme, words] of Object.entries(THEME_EXPAND)) {
+        if (words.some(w => q.includes(w)) || q.includes(theme)) {
+          words.forEach(w => terms.add(w));
+          terms.add(theme);
+        }
+      }
+      if (/scared|afraid|fear/.test(q)) ["courage","fear","uncertainty","risk"].forEach(w => terms.add(w));
+      if (/start over|starting over|new chapter|transition|change careers?/.test(q)) ["transition","change","pivot","beginning"].forEach(w => terms.add(w));
+      if (/stuck|motivation|discipline|consistent/.test(q)) ["discipline","habit","standard","willingness"].forEach(w => terms.add(w));
+      return [...terms];
+    }
+
+    function getRelevantContext(question, maxChars = 7500) {
+      const q = question.toLowerCase();
+      const expanded = expandQuery(question);
+
+      const scored = writings.map(w => {
+        let score = 0;
+        const t = (w.title || "").toLowerCase();
+        const c = (w.content || "").toLowerCase();
+        const topics = (w.topics || []).join(" ").toLowerCase();
+        const expandTerms = (w.expand_terms || []).map(x => x.toLowerCase());
+
+        if (t.includes(q)) score += 14;
+        if (c.includes(q)) score += 6;
+
+        for (const term of expanded) {
+          if (term.length < 3) continue;
+          if (t.includes(term)) score += 4;
+          if (topics.includes(term)) score += 3;
+          if (expandTerms.includes(term)) score += 2;
+          if (c.includes(term)) score += 1;
+        }
+
+        if (w.foundational) score += 2;
+        if (typeof activeTopic !== "undefined" && activeTopic && (w.topics || []).includes(activeTopic)) score += 3;
+
+        return { w, score };
+      });
+
+      let selected = scored.filter(x => x.score > 0).sort((a,b) => b.score - a.score).slice(0, 5);
+      if (selected.length < 4) {
+        const found = scored.filter(x => x.w.foundational && !selected.find(s => s.w === x.w))
+          .sort((a,b) => b.score - a.score).slice(0, 2);
+        selected = selected.concat(found);
+      }
+      if (!selected.length) selected = writings.slice(0, 3).map(w => ({ w, score: 0 }));
+
+      let ctx = "";
+      const sources = [];
+      for (const { w } of selected) {
+        const piece = `Title: ${w.title}\nTopics: ${(w.topics||[]).join(", ")}\n${w.content}\n\n---\n\n`;
+        if (ctx.length + piece.length > maxChars) break;
+        ctx += piece;
+        sources.push(w.title);
+      }
+      return { context: ctx, sources, expandedTerms: expanded };
+    }
+
+    function showLimitUI() {
+      rateMsg.classList.remove('hidden');
+      rateMsg.innerHTML = `
+        That's today's five. Come back tomorrow.<br>
+        <button type="button" onclick="openSignup()" class="mt-2 underline text-gold hover:text-gold/80">Create a free account</button> to keep this conversation.
+      `;
+      trackEvent('ai_limit_reached');
+    }
+
+    chatForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const question = chatInput.value.trim();
+      if (!question) return;
+
+      if (getUsage().count >= FREE_DAILY_LIMIT) {
+        showLimitUI();
+        return;
+      }
+
+      chatInput.value = '';
+      addMessage('user', question);
+      incrementUsage();
+      trackEvent('ai_question', { length: question.length });
+      saveMessage('user', question); // always saved
+
+      const thinking = document.createElement('div');
+      thinking.className = 'text-sm text-offwhite/40 italic';
+      thinking.textContent = 'Thinking…';
+      messagesEl.appendChild(thinking);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+
+      const { context, sources } = getRelevantContext(question);
+
+      try {
+        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${GROQ_API_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: 'openai/gpt-oss-120b',
+            messages: [
+              {
+                role: 'system',
+                content: `You are AI Abe, the digital extension of Abe Newmeyer — The Synthesizer.
+Voice: calm, direct, experienced. No corporate fluff.
+Task: answer using the provided writings only. Infer the visitor's intent and emotional theme (e.g. fear of change, need for discipline, search for purpose). Use both direct and implied meaning from the sources.
+Rules:
+- Prefer short sentences and short paragraphs so high-achievers can skim.
+- 3 to 6 tight points maximum.
+- No random numbering schemes. No asterisks.
+- Do not invent personal stories that are not in the sources.
+- If the sources only partially cover the question, say what is present and what is not.
+- Do not list source titles yourself; the interface attaches them.
+Context from Abe's writings:
+${context}`
+              },
+              { role: 'user', content: question }
+            ],
+            temperature: 0.55,
+            max_tokens: 800
+          })
+        });
+
+        thinking.remove();
+        if (!res.ok) {
+          addMessage('assistant', 'Sorry — the model could not respond just now. Please try again in a few seconds.');
+          return;
+        }
+        const data = await res.json();
+        const answer = data.choices?.[0]?.message?.content || 'No response generated.';
+        addMessage('assistant', answer, sources);
+        saveMessage('assistant', answer);
+      } catch (err) {
+        thinking.remove();
+        addMessage('assistant', 'Network error. Please check your connection and try again.');
+        console.error(err);
+      }
+    });
+
+    function openSignup() {
+      document.getElementById('signup-modal').classList.remove('hidden');
+      document.getElementById('signup-modal').classList.add('flex');
+      trackEvent('signup_started');
+    }
+    function closeSignup() {
+      document.getElementById('signup-modal').classList.add('hidden');
+      document.getElementById('signup-modal').classList.remove('flex');
+    }
+    window.openSignup = openSignup;
+    window.closeSignup = closeSignup;
+
+    document.getElementById('signup-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const payload = {
+        first_name: fd.get('first_name').trim(),
+        last_name: fd.get('last_name').trim(),
+        email: fd.get('email').trim().toLowerCase(),
+        phone: (fd.get('phone') || '').trim() || null,
+        notify_ai_abe: !!fd.get('notify_ai_abe')
+      };
+
+      const user = await sbInsert('users', payload);
+      if (!user) {
+        alert('Could not create account. That email may already be registered, or there was a network issue.');
+        return;
+      }
+
+      await sbInsert('identities', {
+        anonymous_id: getAnonymousId(),
+        user_id: user.id
+      });
+
+      const convId = localStorage.getItem(CONV_KEY);
+      if (convId) {
+        fetch(`${SUPABASE_URL}/rest/v1/conversations?id=eq.${convId}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_ANON,
+            'Authorization': `Bearer ${SUPABASE_ANON}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ user_id: user.id })
+        }).catch(() => {});
+      }
+
+      trackEvent('signup_completed', { email: payload.email });
+      closeSignup();
+      rateMsg.innerHTML = `<span class="text-gold">Account created.</span> Your conversation is saved. Come back anytime.`;
+      rateMsg.classList.remove('hidden');
+    });
+
+    loadWritings();
+    updateQuotaDisplay();
+    trackEvent('page_view', { page: 'writings' });
+    getAnonymousId();
+  </script>
+</body>
+</html>
