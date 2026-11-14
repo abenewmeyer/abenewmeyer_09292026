@@ -167,12 +167,12 @@
       if (!gridEl.children.length) emptyEl.classList.remove('hidden');
     }
     async function load() {
-      // Live catalog from Supabase (GitHub Action uploads). Fallback: local manifest.
+      // Live catalog from Supabase. Fallback: local manifest.
       const SUPABASE_URL = 'https://fqpkiefxcszhlxdskiwb.supabase.co';
       const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxcGtpZWZ4Y3N6aGx4ZHNraXdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2OTM1NTAsImV4cCI6MjEwNjI2OTU1MH0.-S4KkXZA-qdWgnSNVpIX1XZie75cS5-Y0KaPNP9_ee8';
       items = [];
       try {
-        const url = SUPABASE_URL + '/rest/v1/media_assets?select=slug,title,description,topics,tags,video_url,duration_sec,status,created_at&or=(status.eq.generated,status.eq.published)&order=created_at.desc&limit=1000';
+        const url = SUPABASE_URL + '/rest/v1/media_assets?select=slug,title,description,topics,tags,video_url,thumbnail_url,duration_sec,status,created_at&or=(status.eq.generated,status.eq.published,status.eq.published_site)&order=created_at.desc&limit=1000';
         const res = await fetch(url, {
           headers: {
             apikey: SUPABASE_ANON,
@@ -189,7 +189,7 @@
           preview: r.description || '',
           topics: r.topics || [],
           video: r.video_url,
-          poster: '',
+          poster: r.thumbnail_url || '',
           duration: r.duration_sec
         })).filter(i => i.video);
       } catch (e) {
